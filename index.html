@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>クボ家 石垣・西表島 旅行 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal-dark:   #004444;
+    --teal-mid:    #006b6b;
+    --teal-light:  #ccf0f0;
+    --purple-dark: #3d1669;
+    --purple-mid:  #57278a;
+    --purple-light:#efe6fa;
+    --amber-dark:  #664200;
+    --amber-mid:   #875a00;
+    --amber-light: #fff5d6;
+    --red-dark:    #851935;
+    --red-mid:     #aa2e50;
+    --red-light:   #fdedf2;
+    --bg-dark:     #062a2a;
+    --white:       #ffffff;
+    --off-white:   #f7fdfd;
+    --gray:        #666;
+    --lgray:       #f0f4f4;
+    --green:       #107a35;
+    --orange:      #ad5400;
+    --gold:        #ffc107;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+    background: #000;
+  }
+
+  /* ── スライドコンテナ ── */
+  #deck {
+    position: relative;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateX(60px);
+    overflow: hidden;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ── ナビゲーション ── */
+  #nav {
+    position: fixed;
+    bottom: 24px; right: 30px;
+    display: flex; gap: 10px;
+    z-index: 100;
+  }
+  .nav-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.08); }
+
+  /* ── プログレスバー ── */
+  #progress-bar {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+    z-index: 200;
+  }
+
+  /* ── スライドカウンター ── */
+  #counter {
+    position: fixed;
+    bottom: 30px; left: 30px;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    z-index: 100;
+  }
+
+  /* ── ドットナビ ── */
+  #dots {
+    position: fixed;
+    bottom: 34px;
+    left: 50%; transform: translateX(-50%);
+    display: flex; gap: 7px;
+    z-index: 100;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .dot.active { background: var(--gold); transform: scale(1.3); }
+
+  /* ════════════════════════════════════════
+     SLIDE 1: タイトル
+  ════════════════════════════════════════ */
+  #slide-1 { background: var(--bg-dark); }
+
+  .wave-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .wave-bg svg {
+    position: absolute;
+    bottom: -10px;
+    width: 200%;
+    animation: wave 8s linear infinite;
+    opacity: 0.15;
+  }
+  .wave-bg svg:nth-child(2) { animation-duration: 12s; animation-delay: -4s; opacity: 0.1; }
+  .wave-bg svg:nth-child(3) { animation-duration: 16s; animation-delay: -8s; opacity: 0.07; }
+  @keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .left-bar {
+    position: absolute;
+    left: 0; top: 0;
+    width: 8px; height: 100%;
+    background: var(--teal-mid);
+  }
+
+  .title-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+  .title-eyebrow {
+    font-size: clamp(11px,1.2vw,14px);
+    font-weight: 300;
+    letter-spacing: 6px;
+    color: var(--teal-light);
+    opacity: 0;
+    transform: translateY(20px);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .title-main {
+    font-size: clamp(52px,7vw,90px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .title-sub {
+    font-size: clamp(22px,3vw,38px);
+    font-weight: 700;
+    color: #88eeee;
+    margin-top: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .title-dates {
+    font-size: clamp(14px,1.6vw,18px);
+    font-weight: 300;
+    color: rgba(180,230,230,0.8);
+    margin-top: 14px;
+    letter-spacing: 2px;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .family-badges {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .family-badge {
+    padding: 8px 20px;
+    background: var(--teal-mid);
+    color: white;
+    font-size: clamp(12px,1.2vw,14px);
+    font-weight: 500;
+    border-radius: 4px;
+  }
+  .divider-line {
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--teal-mid), transparent);
+    margin-top: 28px;
+    opacity: 0;
+  }
+  .title-keywords {
+    margin-top: 16px;
+    font-size: clamp(11px,1.1vw,13px);
+    color: rgba(180,230,230,0.7);
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  /* アニメーション in ── */
+  .slide.active .title-eyebrow  { animation: fadeUp 0.7s 0.1s ease forwards; }
+  .slide.active .title-main     { animation: fadeUp 0.7s 0.25s ease forwards; }
+  .slide.active .title-sub      { animation: fadeUp 0.7s 0.4s ease forwards; }
+  .slide.active .title-dates    { animation: fadeUp 0.6s 0.55s ease forwards; }
+  .slide.active .family-badges  { animation: fadeUp 0.6s 0.7s ease forwards; }
+  .slide.active .divider-line   { animation: fadeIn 0.6s 0.85s ease forwards; }
+  .slide.active .title-keywords { animation: fadeUp 0.6s 0.95s ease forwards; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  .bottom-footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50px;
+    background: var(--teal-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 300;
+    color: rgba(150,210,210,0.8);
+    letter-spacing: 2px;
+  }
+
+  /* ════════════════════════════════════════
+     SLIDE 2: 旅行概要
+  ════════════════════════════════════════ */
+  #slide-2 { background: var(--off-white); }
+
+  /* ════════════════════════════════════════
+     汎用ヘッダー（Dayスライド）
+  ════════════════════════════════════════ */
+  .day-header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 32px;
+  }
+  .day-badge {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .day-title {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 900;
+    color: var(--white);
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  .slide.active .day-title { animation: fadeRight 0.7s 0.2s ease forwards; }
+  @keyframes fadeRight { to { opacity: 1; transform: translateX(0); } }
+
+  .day-date {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    margin-left: auto;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  .accent-line {
+    position: absolute;
+    top: 100px; left: 0; right: 0;
+    height: 4px;
+  }
+
+  /* ── タイムラインコンテナ ── */
+  .timeline {
+    position: absolute;
+    top: 118px; left: 24px; right: 24px; bottom: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .timeline::-webkit-scrollbar { width: 4px; }
+  .timeline::-webkit-scrollbar-track { background: transparent; }
+  .timeline::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+
+  .tl-section {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--white);
+    padding: 5px 12px;
+    border-radius: 3px;
+    opacity: 0;
+    transform: translateX(-15px);
+    text-transform: uppercase;
+  }
+  .tl-row {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: box-shadow 0.2s;
+    flex-shrink: 0;
+  }
+  .tl-row:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+
+  .tl-time {
+    width: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+    text-align: center;
+    padding: 10px 4px;
+  }
+  .tl-body {
+    flex: 1;
+    padding: 9px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .tl-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tl-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+  .tl-detail {
+    font-size: 11px;
+    color: var(--gray);
+    line-height: 1.5;
+  }
+
+  .badge-ok {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--green);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-req {
+    display: inline-flex;
+    align-items: center;
+    background: var(--orange);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* アニメーション delay は JS で付与 */
+  .slide.active .tl-section,
+  .slide.active .tl-row {
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  /* ── 特殊ブロック ── */
+  .special-block {
+    border-radius: 8px;
+    padding: 14px 16px;
+    opacity: 0;
+    transform: translateY(12px);
+    flex-shrink: 0;
+  }
+  .slide.active .special-block { animation: fadeUp 0.5s ease forwards; }
+
+  .plan-row {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .plan-box {
+    flex: 1;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+  }
+  .plan-label {
+    width: 56px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 1px;
+  }
+  .plan-body {
+    flex: 1;
+    padding: 8px 12px;
+  }
+  .plan-title { font-size: 12px; font-weight: 700; }
+  .plan-detail { font-size: 10.5px; color: var(--gray); margin-top: 2px; }
+  .slide.active .plan-row { animation: fadeUp 0.5s ease forwards; }
+
+  /* ── お祝いブロック ── */
+  .celebrate {
+    background: var(--bg-dark);
+    border-radius: 8px;
+    padding: 14px 20px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    flex-shrink: 0;
+  }
+  .celebrate-title {
+    font-size: clamp(14px,1.6vw,18px);
+    font-weight: 900;
+    color: var(--gold);
+  }
+  .celebrate-sub {
+    font-size: 11px;
+    color: rgba(180,180,180,0.8);
+    margin-top: 4px;
+  }
+  .slide.active .celebrate { animation: fadeUp 0.5s ease forwards; }
+
+  /* ════════════════════════════════════════
+     SLIDE 2: 概要 specific
+  ════════════════════════════════════════ */
+  .overview-header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 80px;
+    background: var(--bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .overview-header h2 {
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    opacity: 0;
+  }
+  .slide.active .overview-header h2 { animation: fadeUp 0.6s 0.1s ease forwards; }
+
+  .stats-row {
+    position: absolute;
+    top: 96px; left: 24px; right: 24px;
+    display: flex;
+    gap: 12px;
+  }
+  .stat-card {
+    flex: 1;
+    border-radius: 8px;
+    padding: 16px 10px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .slide.active .stat-card { animation: fadeUp 0.6s ease forwards; }
+  .stat-num {
+    font-size: clamp(32px,4.5vw,54px);
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+  }
+  .stat-lbl {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  .hotels-section {
+    position: absolute;
+    top: 270px; left: 24px; right: 24px;
+  }
+  .hotels-label {
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 1px; color: white;
+    background: var(--bg-dark);
+    padding: 5px 14px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 8px;
+    opacity: 0;
+  }
+  .slide.active .hotels-label { animation: fadeIn 0.5s 0.6s forwards; }
+
+  .hotels-row {
+    display: flex;
+    gap: 10px;
+  }
+  .hotel-card {
+    flex: 1;
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  .slide.active .hotel-card { animation: fadeUp 0.5s ease forwards; }
+  .hotel-date {
+    width: 54px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    padding: 4px;
+  }
+  .hotel-info {
+    flex: 1;
+    padding: 8px 10px;
+  }
+  .hotel-name { font-size: 11px; font-weight: 700; color: #222; line-height: 1.3; }
+  .hotel-price { font-size: 16px; font-weight: 900; margin-top: 4px; }
+
+  .cost-section {
+    position: absolute;
+    bottom: 16px; left: 24px; right: 24px;
+  }
+  .cost-total-bar {
+    background: var(--bg-dark);
+    border-radius: 7px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    opacity: 0;
+  }
+  .slide.active .cost-total-bar { animation: fadeUp 0.5s 0.9s forwards; }
+  .cost-total-label { font-size: 12px; color: rgba(180,230,230,0.8); font-weight: 500; }
+  .cost-total-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+  }
+  .cost-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    opacity: 0;
+  }
+  .slide.active .cost-items { animation: fadeIn 0.5s 1.05s forwards; }
+  .cost-item {
+    background: var(--lgray);
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10.5px;
+  }
+  .cost-item-name { color: var(--gray); }
+  .cost-item-price { font-weight: 700; color: var(--bg-dark); }
+
+  /* ════════════════════════════════════════
+     スライド8: 費用サマリー
+  ════════════════════════════════════════ */
+  .summary-grid {
+    position: absolute;
+    top: 96px; left: 24px; right: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .summary-card {
+    background: white;
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .slide.active .summary-card { animation: fadeUp 0.5s ease forwards; }
+  .summary-accent { width: 6px; flex-shrink: 0; }
+  .summary-body { padding: 10px 14px; flex: 1; }
+  .summary-name { font-size: 11px; color: #444; font-weight: 500; }
+  .summary-price { font-size: 18px; font-weight: 900; margin-top: 3px; }
+
+  .summary-total {
+    position: absolute;
+    bottom: 60px; left: 24px; right: 24px;
+    background: var(--bg-dark);
+    border-radius: 8px;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    opacity: 0;
+  }
+  .slide.active .summary-total { animation: fadeUp 0.5s 0.8s forwards; }
+  .summary-total-label { font-size: 12px; color: rgba(180,230,230,0.8); }
+  .summary-total-num { font-size: 32px; font-weight: 900; color: var(--gold); }
+
+  .summary-note {
+    position: absolute;
+    bottom: 22px; left: 24px; right: 24px;
+    font-size: 10px;
+    color: var(--gray);
+    text-align: center;
+    opacity: 0;
+  }
+  .slide.active .summary-note { animation: fadeIn 0.5s 1.0s forwards; }
+
+  /* カスタムスクロール */
+  .timeline { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.12) transparent; }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ══════════════════════════════
+       SLIDE 1: タイトル
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-1">
+    <div class="wave-bg">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="#88eeee">
+        <path d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z"/>
+      </svg>
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="#ccf0f0">
+        <path d="M0,80 C360,20 720,100 1080,40 C1260,20 1380,70 1440,80 L1440,120 L0,120 Z"/>
+      </svg>
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="#aadede">
+        <path d="M0,40 C180,90 360,10 540,60 C720,110 900,20 1080,70 C1260,110 1380,50 1440,40 L1440,120 L0,120 Z"/>
+      </svg>
+    </div>
+    <div class="left-bar"></div>
+    <div class="title-content">
+      <div class="title-eyebrow">KUBO FAMILY TRIP 2026</div>
+      <div class="title-main">クボ家</div>
+      <div class="title-sub">石垣島・西表島　旅行</div>
+      <div class="title-dates">2026年5月4日（月）〜 7日（木）　4日間</div>
+      <div class="family-badges">
+        <div class="family-badge">✈ ショマ</div>
+        <div class="family-badge">🌺 ミカコ</div>
+        <div class="family-badge">🤿 セオ（11）</div>
+        <div class="family-badge">🌟 アリス（8）</div>
+      </div>
+      <div class="divider-line"></div>
+      <div class="title-keywords">
+        🌊 ピナイサーラの滝カヌー　　🐃 水牛車で由布島　　🐢 ウミガメシュノーケリング　　⭐ 星空観察
+      </div>
+    </div>
+    <div class="bottom-footer">クボ家　2026年 ゴールデンウィーク</div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 2: 旅行概要
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div style="position:absolute;inset:0;background:var(--off-white)"></div>
+    <div class="overview-header"><h2>旅行概要</h2></div>
+    <div style="position:absolute;top:80px;left:0;right:0;height:4px;background:var(--teal-mid)"></div>
+
+    <div class="stats-row">
+      <div class="stat-card" style="background:var(--teal-dark);animation-delay:0.15s">
+        <div class="stat-num">4</div><div class="stat-lbl">日間</div>
+      </div>
+      <div class="stat-card" style="background:var(--purple-dark);animation-delay:0.25s">
+        <div class="stat-num">4</div><div class="stat-lbl">名</div>
+      </div>
+      <div class="stat-card" style="background:var(--amber-dark);animation-delay:0.35s">
+        <div class="stat-num" style="font-size:clamp(22px,3vw,36px)">5/4〜5/7</div><div class="stat-lbl">GW</div>
+      </div>
+      <div class="stat-card" style="background:var(--red-dark);animation-delay:0.45s">
+        <div class="stat-num">2島</div><div class="stat-lbl">石垣 ＋ 西表</div>
+      </div>
+    </div>
+
+    <div class="hotels-section">
+      <div class="hotels-label">🏨 宿泊</div>
+      <div class="hotels-row">
+        <div class="hotel-card" style="animation-delay:0.65s">
+          <div class="hotel-date" style="background:var(--teal-dark)">5/4</div>
+          <div class="hotel-info" style="background:var(--teal-light)">
+            <div class="hotel-name">MARCHE HOTEL UNIVERSALA ISHIGAKI</div>
+            <div class="hotel-price" style="color:var(--teal-dark)">¥27,524</div>
+          </div>
+        </div>
+        <div class="hotel-card" style="animation-delay:0.75s">
+          <div class="hotel-date" style="background:var(--purple-dark)">5/5–6</div>
+          <div class="hotel-info" style="background:var(--purple-light)">
+            <div class="hotel-name">西表島ホテル（2泊）</div>
+            <div class="hotel-price" style="color:var(--purple-dark)">¥65,280</div>
+          </div>
+        </div>
+        <div class="hotel-card" style="animation-delay:0.85s">
+          <div class="hotel-date" style="background:var(--amber-dark)">5/6</div>
+          <div class="hotel-info" style="background:var(--amber-light)">
+            <div class="hotel-name">ANAインターコンチネンアリスリゾート</div>
+            <div class="hotel-price" style="color:var(--amber-dark)">¥75,240</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cost-section">
+      <div class="cost-total-bar">
+        <div class="cost-total-label">旅行費合計（確定分）</div>
+        <div class="cost-total-num">¥ 262,021</div>
+      </div>
+      <div class="cost-items">
+        <div class="cost-item"><span class="cost-item-name">🚗 トヨタレンタカー（3日）</span><span class="cost-item-price">¥31,977</span></div>
+        <div class="cost-item"><span class="cost-item-name">🐢 ウミガメシュノーケリング</span><span class="cost-item-price">¥22,000</span></div>
+        <div class="cost-item"><span class="cost-item-name">🛶 ピナイサーラカヌーツアー</span><span class="cost-item-price">¥40,000</span></div>
+        <div class="cost-item"><span class="cost-item-name">⛴ フェリー往復（目安）</span><span class="cost-item-price">≈¥8,000</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 3: DAY 1
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div style="position:absolute;inset:0;background:var(--off-white)"></div>
+    <div class="day-header" style="background:var(--teal-dark)">
+      <div class="day-badge" style="background:white;color:var(--teal-dark)">DAY 1</div>
+      <div class="day-title">石垣島　到着</div>
+      <div class="day-date">5月4日（月・祝）</div>
+    </div>
+    <div class="accent-line" style="background:var(--teal-mid)"></div>
+    <div class="timeline">
+      <div class="tl-section" style="background:var(--teal-dark)">✈ 移動</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--teal-dark)">06:30</div>
+        <div class="tl-body" style="background:var(--teal-light)">
+          <div class="tl-top"><span class="tl-title">✈ 羽田空港 出発 → 石垣空港</span><span class="badge-ok">✅ 予約済み</span></div>
+          <div class="tl-detail">ANA 671　羽田 06:30 → 石垣 09:55</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--teal-dark)">10:00</div>
+        <div class="tl-body" style="background:var(--teal-light)">
+          <div class="tl-top"><span class="tl-title">🚗 トヨタレンタカー 受取</span><span class="badge-ok">✅ 予約済み</span></div>
+          <div class="tl-detail">予約番号: 98184579700　C1クラス　5/4〜5/7　¥31,977</div>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--teal-dark)">☀ 観光</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--teal-mid)">11:00</div>
+        <div class="tl-body" style="background:#eaf8f8">
+          <div class="tl-top"><span class="tl-title">🍜 八重山そば ランチ</span></div>
+          <div class="tl-detail">石垣島の郷土そばを堪能（来夏世・明石食堂など）</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--teal-mid)">13:00</div>
+        <div class="tl-body" style="background:#eaf8f8">
+          <div class="tl-top"><span class="tl-title">🐢 ウミガメシュノーケリング</span><span class="badge-req">要予約</span></div>
+          <div class="tl-detail">川平湾エリア　¥22,000（4名）</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--teal-mid)">15:30</div>
+        <div class="tl-body" style="background:#eaf8f8">
+          <div class="tl-top"><span class="tl-title">🍦 ミルミル本舗 → 玉取崎展望台</span></div>
+          <div class="tl-detail">絶景カフェでソフトクリーム ＋ パノラマ夕景</div>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--teal-dark)">🏨 チェックイン</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--teal-dark)">17:00</div>
+        <div class="tl-body" style="background:var(--teal-light)">
+          <div class="tl-top"><span class="tl-title">🏨 MARCHE HOTEL UNIVERSALA ISHIGAKI</span><span class="badge-ok">✅ 予約済み</span></div>
+          <div class="tl-detail">予約番号: T7511D92ADB3C　¥27,524</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--teal-mid)">18:30</div>
+        <div class="tl-body" style="background:#eaf8f8">
+          <div class="tl-top"><span class="tl-title">🍽 夕食</span></div>
+          <div class="tl-detail">石垣島の郷土料理・海鮮を楽しむ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 4: DAY 2 前半
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div style="position:absolute;inset:0;background:var(--off-white)"></div>
+    <div class="day-header" style="background:var(--purple-dark)">
+      <div class="day-badge" style="background:white;color:var(--purple-dark)">DAY 2</div>
+      <div class="day-title">西表島 ① — フェリー・カヌー・由布島</div>
+      <div class="day-date">5月5日（火・祝）</div>
+    </div>
+    <div class="accent-line" style="background:var(--purple-mid)"></div>
+    <div class="timeline">
+      <div class="tl-section" style="background:var(--purple-dark)">⛴ 石垣 → 西表島（上原港）</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-dark)">07:30</div>
+        <div class="tl-body" style="background:var(--purple-light)">
+          <div class="tl-top"><span class="tl-title">⛴ 石垣港 出発 → 上原港 08:45着</span></div>
+          <div class="tl-detail">安栄観光フェリー　大人 ¥2,690 / 子ども ¥1,350</div>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--purple-dark)">🛶 カヌーツアー</div>
+      <div class="special-block" style="background:var(--purple-light);border-left:5px solid var(--purple-dark)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:15px;font-weight:900;color:var(--purple-dark)">🛶 ピナイサーラの滝つぼトレッキング</div>
+            <div style="font-size:11px;color:var(--gray);margin-top:4px">09:00〜14:00　催行: iriomote-tour.com / plan: canoe165</div>
+            <div style="font-size:11px;color:var(--gray);margin-top:2px">カヌー往復 ＋ 滝つぼトレッキング ＋ ランチ込み</div>
+            <div style="font-size:14px;font-weight:900;color:var(--purple-dark);margin-top:6px">¥10,000 × 4名 = ¤40,000</div>
+          </div>
+          <span class="badge-req" style="font-size:11px;padding:4px 10px;margin-top:2px">要予約</span>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--purple-dark)">🛺 午後 — トゥクトゥク &amp; 由布島</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-dark)">14:30</div>
+        <div class="tl-body" style="background:var(--purple-light)">
+          <div class="tl-top"><span class="tl-title">🛺 Hop On トゥクトゥク レンタル</span><span class="badge-req">要予約</span></div>
+          <div class="tl-detail">上原港エリアで電動三輪レンタル → 水牛乗り場へ</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-mid)">15:00</div>
+        <div class="tl-body" style="background:#f0e8fc">
+          <div class="tl-top"><span class="tl-title">🐃 水牛車で由布島へ</span></div>
+          <div class="tl-detail">水牛車渡し（片道約15分）＋ 由布島植物園散策　入園料: 大人 ¥1,000 / 子ども ¥700</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-mid)">16:30</div>
+        <div class="tl-body" style="background:#f0e8fc">
+          <div class="tl-top"><span class="tl-title">🛺 トゥクトゥクで帰路</span></div>
+          <div class="tl-detail">島の商店・滝見スポットに立ち寄りながらホテルへ。17:00頃着</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 5: DAY 2 後半
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div style="position:absolute;inset:0;background:var(--off-white)"></div>
+    <div class="day-header" style="background:var(--purple-dark)">
+      <div class="day-badge" style="background:white;color:var(--purple-dark)">DAY 2</div>
+      <div class="day-title">西表島 ② — 夕方・夜の西表</div>
+      <div class="day-date">5月5日（火・祝）続き</div>
+    </div>
+    <div class="accent-line" style="background:var(--purple-mid)"></div>
+    <div class="timeline">
+      <div class="tl-section" style="background:var(--purple-dark)">🏨 チェックイン・夕方</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-dark)">17:00</div>
+        <div class="tl-body" style="background:var(--purple-light)">
+          <div class="tl-top"><span class="tl-title">🏨 西表島ホテル チェックイン</span><span class="badge-ok">✅ 予約済み</span></div>
+          <div class="tl-detail">料金: ¥65,280（2泊）</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-mid)">17:30</div>
+        <div class="tl-body" style="background:#f0e8fc">
+          <div class="tl-top"><span class="tl-title">🏖 ビーチ・プールでリラックス</span></div>
+          <div class="tl-detail">西表島ホテルのビーチ＆プール</div>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--purple-dark)">🌅 夕日・夜</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-mid)">18:30</div>
+        <div class="tl-body" style="background:#f0e8fc">
+          <div class="tl-top"><span class="tl-title">🌇 夕日鑑賞</span></div>
+          <div class="tl-detail">日没 約19:10。海に沈む夕陽を家族全員で</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-mid)">19:30</div>
+        <div class="tl-body" style="background:#f0e8fc">
+          <div class="tl-top"><span class="tl-title">🍽 夕食</span></div>
+          <div class="tl-detail">西表島ホテル内レストラン or 上原港周辺の居酒屋</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--purple-dark)">21:00</div>
+        <div class="tl-body" style="background:var(--purple-light)">
+          <div class="tl-top"><span class="tl-title">🏫 世界遺産学校 参加</span><span class="badge-req">要予約</span></div>
+          <div class="tl-detail">西表島ホテル主催　西表島の自然・文化・世界遺産を学ぶ夜の特別プログラム</div>
+        </div>
+      </div>
+
+      <div class="celebrate" style="margin-top:4px">
+        <div class="celebrate-title">⭐ 22:30　星空観察</div>
+        <div class="celebrate-sub">光害のない西表島の夜空。天の川もくっきり！懐中電灯を持ってビーチへ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 6: DAY 3
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div style="position:absolute;inset:0;background:var(--off-white)"></div>
+    <div class="day-header" style="background:var(--amber-dark)">
+      <div class="day-badge" style="background:white;color:var(--amber-dark)">DAY 3</div>
+      <div class="day-title">西表島 → 石垣島</div>
+      <div class="day-date">5月6日（水）</div>
+    </div>
+    <div class="accent-line" style="background:var(--amber-mid)"></div>
+    <div class="timeline">
+      <div class="tl-section" style="background:var(--amber-dark)">🌊 午前 — 海遊び＆フェリー</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--amber-mid)">09:00</div>
+        <div class="tl-body" style="background:#fff8e8">
+          <div class="tl-top"><span class="tl-title">🌊 上原港付近で海遊び・シュノーケリング</span></div>
+          <div class="tl-detail">西表島最後の海！トゥクトゥク返却前に満喫</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--amber-mid)">10:30</div>
+        <div class="tl-body" style="background:#fff8e8">
+          <div class="tl-top"><span class="tl-title">🛺 トゥクトゥク返却</span></div>
+          <div class="tl-detail">Hop On トゥクトゥクを上原港付近にて返却</div>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--amber-dark)">⛴ フェリープラン</div>
+      <div class="plan-row">
+        <div class="plan-box">
+          <div class="plan-label" style="background:#107a35">PLAN<br>A</div>
+          <div class="plan-body" style="background:#d4f0d4">
+            <div class="plan-title" style="color:#107a35">✅ 上原航路 欠航なし</div>
+            <div class="plan-detail">上原港 11:00発 → 石垣港 12:15着</div>
+          </div>
+        </div>
+        <div class="plan-box">
+          <div class="plan-label" style="background:var(--orange)">PLAN<br>B</div>
+          <div class="plan-body" style="background:#fff0d8">
+            <div class="plan-title" style="color:var(--orange)">⚠ 上原航路 欠航の場合</div>
+            <div class="plan-detail">バスで大原港へ → 大原港 11:30発 → 12:40着</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--amber-dark)">🏝 午後 — インターコンチネンタル石垣</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--amber-mid)">13:00</div>
+        <div class="tl-body" style="background:#fff8e8">
+          <div class="tl-top"><span class="tl-title">🍽 石垣港 到着 / ランチ</span></div>
+          <div class="tl-detail">離島ターミナル周辺で食事</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--amber-dark)">15:00</div>
+        <div class="tl-body" style="background:var(--amber-light)">
+          <div class="tl-top"><span class="tl-title">🏨 ANAインターコンチネンタル石垣リゾート チェックイン</span><span class="badge-ok">✅ 予約済み</span></div>
+          <div class="tl-detail">¥75,240　プール・ビーチ・マリンスポーツ思い切り楽しもう！</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--amber-mid)">19:00</div>
+        <div class="tl-body" style="background:#fff8e8">
+          <div class="tl-top"><span class="tl-title">🍽 夕食</span></div>
+          <div class="tl-detail">ホテル内レストラン or 石垣市内で夕食</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 7: DAY 4
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div style="position:absolute;inset:0;background:var(--off-white)"></div>
+    <div class="day-header" style="background:var(--red-dark)">
+      <div class="day-badge" style="background:white;color:var(--red-dark)">DAY 4</div>
+      <div class="day-title">石垣島 → 羽田　帰宅</div>
+      <div class="day-date">5月7日（木）</div>
+    </div>
+    <div class="accent-line" style="background:var(--red-mid)"></div>
+    <div class="timeline">
+      <div class="tl-section" style="background:var(--red-dark)">🌄 朝 — チェックアウト</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--red-mid)">06:30</div>
+        <div class="tl-body" style="background:#fdf0f4">
+          <div class="tl-top"><span class="tl-title">⏰ 起床・荷物まとめ</span></div>
+          <div class="tl-detail">朝食はホテルまたはコンビニで</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--red-dark)">07:00</div>
+        <div class="tl-body" style="background:var(--red-light)">
+          <div class="tl-top"><span class="tl-title">🏨 ANAインターコンチネンタル チェックアウト</span><span class="badge-ok">✅ 予約済み</span></div>
+        </div>
+      </div>
+
+      <div class="tl-section" style="background:var(--red-dark)">🚗 レンタカー 返却</div>
+      <div class="tl-row">
+        <div class="tl-time" style="background:var(--red-dark)">07:30</div>
+        <div class="tl-body" style="background:var(--red-light)">
+          <div class="tl-top"><span class="tl-title">🚗 トエタレ��>8+�8*�8;�y�>Y�>z��k��[�r��NX�C��7���7�6�73�&&FvR���#�)�RK��{HNk��8���7����F�c��F�b6�73�'F��FWF��#�K��{HNyZ�X�s����CSs�s8��NX�Ni�����^iȃ~izR��88*�8+�8:�8;>k�8+�8;>��N8s��F�c���F�c���F�cࠢ�F�b6�73�'F��6V7F���"7G��S�&&6�w&�V�C�f"���&VB�F&��#�)Ȃy�>Y�2(i"{��yK��F�c��F�b6�73�'F��&�r#��F�b6�73�'F��F��R"7G��S�&&6�w&�V�C�f"���&VB�֖B�#�����F�c��F�b6�73�'F��&�G�"7G��S�&&6�w&�V�C�6fFccB#��F�b6�73�'F��F�#��7�6�73�'F��F�F�R#�	��"y�>Y�>z��k��K��Z�jI�i����7����F�c��F�b6�73�'F��FWF��#�X{�y��.i�.�i>X��8�z��k��X�y���F�c���F�c���F�c��F�b6�73�'F��&�r#��F�b6�73�'F��F��R"7G��S�&&6�w&�V�C�f"���&VB�F&��#��S��F�c��F�b6�73�'F��&�G�"7G��S�&&6�w&�V�C�f"���&VB�Ɩv�B�#��F�b6�73�'F��F�#��7�6�73�'F��F�F�R#�)Ȃy�>Y�>z��k��X{�y��(i"{��yK3�S^y���7���7�6�73�&&FvR���#�)�RK��{HNk��8���7����F�c��F�b6�73�'F��FWF��#��cs.8y�>Y�2�R(i"{��yK3�SS��F�c���F�c���F�cࠢ�F�b6�73�&6V�V'&FR"7G��S�&�&v���F��G�#��F�b6�73�&6V�V'&FR�F�F�R#�	��8�yk.8(�jy�8~8~8���8*�89�Z�n8�ix^8Z����	����F�c��F�b6�73�&6V�V'&FR�7V"#�89N88�8*N8+^8;�8:�8�k��	�Ȯ8kNx�����	�>8i��z��*�88*n89�8*�8:	�
+.8i����8�h	�8NX{�8).����F�c���F�c���F�c���F�cࠢ���)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y �4ĔDR���+�yJ�8+^89�8:�8;��)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y����F�b6�73�'6ƖFR"�C�'6ƖFRӂ#��F�b7G��S�'�6�F���'6��WFS���6WC��&6�w&�V�C�f"����fb�v��FR�#���F�c��F�b6�73�&�fW'f�WrֆVFW"#�ƃ#�	�+ix^�΋+�8+^89�8:�8;����#���F�c��F�b7G��S�'�6�F���'6��WFS�F������VgC��&�v�C���V�v�C�G��&6�w&�V�C�f"���FV��֖B�#���F�cࠢ�F�b6�73�'7V��'��w&�B#��F�b6�73�'7V��'��6&B"7G��S�&��F����FV����2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"���FV��F&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�)Ȃ�89^8:�8*N88�[�[��ȃNY��ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�f"���FV��F&��#���8�k��8���F�c���F�c���F�c��F�b6�73�'7V��'��6&B"7G��S�&��F����FV�����2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"���FV��F&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�	����$4�R��DT�T�dU%4��ȃk8��ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�f"���FV��F&��#�*S#r�S#C��F�c���F�c���F�c��F�b6�73�'7V��'��6&B"7G��S�&��F����FV����#g2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"���W'�R�F&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�	����[���[;n89�88n8:��ȃ.k8��ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�f"���W'�R�F&��#�*ScR�#���F�c���F�c���F�c��F�b6�73�'7V��'��6&B"7G��S�&��F����FV����3G2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"����&W"�F&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�	����8*N8;>8+�8;�8+>8;>8888�8;>8+�8:�y�>Y�>�ȃk8��ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�f"����&W"�F&��#�*SsR�#C��F�c���F�c���F�c��F�b6�73�'7V��'��6&B"7G��S�&��F����FV����C'2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"���w&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�	��r88�8:�8+�8:�8;>8+�8*�8;��ȃ>iz^�i>�ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�3CCB#�*S3Óss��F�c���F�c���F�c��F�b6�73�'7V��'��6&B"7G��S�&��F����FV����S2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"���W'�R�F&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�	��b89N88�8*N8+^8;�8:�8*�88�8;�88N8*.8;��ȃNY��ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�f"���W'�R�F&��#�*SC���F�c���F�c���F�c��F�b6�73�'7V��'��6&B"7G��S�&��F����FV����S�2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"���FV��F&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�	�
+"8*n89�8*�8:8+~8:^88�8;�8+8:�8;>8+�ȃNY��ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�f"���FV��F&��#�*S#"���F�c���F�c���F�c��F�b6�73�'7V��'��6&B"7G��S�&��F����FV����cg2#��F�b6�73�'7V��'��66V�B"7G��S�&&6�w&�V�C�f"���w&��#���F�c��F�b6�73�'7V��'��&�G�#��F�b6�73�'7V��'����R#�)�B89^8*~8:�8;�[�[��Ȏy��Z��ȓ��F�c��F�b6�73�'7V��'��&�6R"7G��S�&6���#�3CCB#�(��*S����F�c���F�c���F�c���F�cࠢ�F�b6�73�'7V��'��F�F�#��F�b6�73�'7V��'��F�F���&V�#�z+�Z�Y�����Ȏ89�88n8:��Ⱦ8*.8*�88n8*>89>88n8*>�Ⱦ8:�8;>8+�8*�8;��ȓ��F�c��F�b6�73�'7V��'��F�F���V�#�*R#c"�#��F�c���F�c��F�b6�73�'7V��'����FR#�(�89^8:�8*N88�K�>8;��9��+�8;�x��Y�K�N�	��+�8;�8�Y��yJ>K�>8�X�^�	N8���8Z�8�8(.ii��y8�ikފ��8�8(�y[8�8(���F�c���F�cࠣ��F�c����6FV6���ࠣ���88�89>8+.8;�8+~8:~8;2����F�b�C�&�b#��'WGF��6�73�&�b�'F�"�C�&'F��&Wb#�b3�S�#���'WGF����'WGF��6�73�&�b�'F�"�C�&'F���W�B#�b3�S�C���'WGF�����F�c��F�b�C�'&�w&W72�&"#���F�c��F�b�C�&6�V�FW"#���F�c��F�b�C�&F�G2#���F�cࠣ�67&�C�6��7BD�D������WB7W'&V�B����6��7B6ƖFW2�'&��g&�҆F�7V�V�B�VW'�6V�V7F�$�r�6ƖFRr����6��7B&�w&W74&"�F�7V�V�B�vWDV�V�V�D'��B�w&�w&W72�&"r���6��7B6�V�FW"�F�7V�V�B�vWDV�V�V�D'��B�v6�V�FW"r���6��7BF�G4V��F�7V�V�B�vWDV�V�V�D'��B�vF�G2r������88�88>88�yI�h� �f�"��WB�����D�Dò������6��7BB�F�7V�V�B�7&VFTV�V�V�B�vF�br���B�6�74��R�vF�Bs��B�FDWfV�DƗ7FV�W"�v6Ɩ6�r�����v�F򆒒���F�G4V��V�D6���B�B���Р�gV�7F�����FT�FV�2�6ƖFTV��6��7B�FV�2�6ƖFTV��VW'�6V�V7F�$�r�F��6V7F�����F��&�r��7V6���&��6������&�r��6V�V'&FR��7V��'��6&Br����FV�2�f�$V6���V��������V��7G��R���F���FV�����"�������w2s��ғ��Р�gV�7F���v�F�G��F�"�����b��G�����G���D�D����G����7W'&V�B�&WGW&㰢6��7B&Wb�6ƖFW5�7W'&V�EӰ�6��7B�W�B�6ƖFW5��G�Ӱ�����Z@�&Wb�6�74Ɨ7B�&V��fR�v7F�fRr����b�F�"����&Wb�6�74Ɨ7B�FB�vW��B��VgBr����W�B�7G��R�G&�6f�&��wG&�6�FU��c��s���V�6R��&Wb�7G��R�G&�6f�&��wG&�6�FU��c��s���W�B�7G��R�G&�6f�&��wG&�6�FU���c��s��Р�6WEF��V�WB�������&Wb�6�74Ɨ7B�&V��fR�vW��B��VgBr���&Wb�7G��R�G&�6f�&��rs����cS����7W'&V�B��G�����FT�FV�2��W�B����W�B�7G��R�G&�6f�&��rs���&WVW7D��F���g&�R�������&WVW7D��F���g&�R��������W�B�6�74Ɨ7B�FB�v7F�fRr���ғ��ғ�����89~8:�8+8:�8+�8;�8*�8*n8;>8+�8;�8;�88�88>88�i�Nik �&�w&W74&"�7G��R�v�GF����7W'&V�B���D�D����rRs��6�V�FW"�FW�D6��FV�B��7W'&V�B���r�r�D�Dð�F�G4V��VW'�6V�V7F�$�r�F�Br��f�$V6���B�������B�6�74Ɨ7B�F�vv�R�v7F�fRr�����7W'&V�B���ғ��Р���X��i��X�`���FT�FV�2�6ƖFW5�ғ��6ƖFW5���6�74Ɨ7B�FB�v7F�fRr���&�w&W74&"�7G��R�v�GF����D�D����rRs��6�V�FW"�FW�D6��FV�B�s�r�D�Dð�F�G4V��VW'�6V�V7F�$�r�F�Br����6�74Ɨ7B�FB�v7F�fRr������89�8+�8;0�F�7V�V�B�vWDV�V�V�D'��B�v'F��&Wbr��FDWfV�DƗ7FV�W"�v6Ɩ6�r�����v�F�7W'&V�B�������F�7V�V�B�vWDV�V�V�D'��B�v'F���W�Br��FDWfV�DƗ7FV�W"�v6Ɩ6�r�����v�F�7W'&V�B���������8*�8;�89�8;�88��F�7V�V�B�FDWfV�DƗ7FV�W"�v�W�F�v�r�R�����b�R�W����t'&�u&�v�Br��R�W����t'&�tF�v�r��R�W����rr��R�&WfV�DFVfV�B���v�F�7W'&V�B����Т�b�R�W����t'&�t�VgBr��R�W����t'&�uWr��R�&WfV�DFVfV�B���v�F�7W'&V�B�����Тғ�����8+�8:�8*N89~�Ȏ8+�88>88�Ȑ��WBF�V6����V�ð�F�7V�V�B�FDWfV�DƗ7FV�W"�wF�V6�7F'Br�R���F�V6���R�F�V6�W5���6ƖV�E�����76�fS�G'VRғ��F�7V�V�B�FDWfV�DƗ7FV�W"�wF�V6�V�Br�R�����b�F�V6������V�&WGW&㰢6��7BG��R�6��vVEF�V6�W5���6ƖV�E��F�V6�����b��F��'2�G���C�v�F�7W'&V�B��G�������G��������F�V6����V�ð�ғ����67&�C���&�G�����F���
