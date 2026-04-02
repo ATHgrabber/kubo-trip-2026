@@ -667,6 +667,176 @@
 
   /* カスタムスクロール */
   .timeline { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.12) transparent; }
+
+  /* ══════════════════════════════════════════
+     追加アニメーション・デコレーション
+  ══════════════════════════════════════════ */
+
+  /* ウミガメ横断アニメ */
+  @keyframes swim {
+    0%   { transform: translateX(-160px) translateY(0px);   opacity: 0; }
+    6%   { opacity: 0.65; }
+    40%  { transform: translateX(38vw)   translateY(-25px); opacity: 0.65; }
+    60%  { transform: translateX(60vw)   translateY(15px);  opacity: 0.65; }
+    94%  { opacity: 0.65; }
+    100% { transform: translateX(110vw)  translateY(-10px); opacity: 0; }
+  }
+  .turtle-swim {
+    position: absolute;
+    bottom: 22%;
+    left: 0;
+    width: 130px;
+    opacity: 0;
+    animation: swim 20s 1.2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* 泡が浮かぶ */
+  @keyframes bubble-rise {
+    0%   { transform: translateY(0)     scale(0.8); opacity: 0.55; }
+    80%  { opacity: 0.35; }
+    100% { transform: translateY(-110px) scale(1.3); opacity: 0; }
+  }
+  .bubbles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .bbl {
+    position: absolute;
+    bottom: 30%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(200,255,255,0.7), rgba(136,238,238,0.15));
+    border: 1px solid rgba(136,238,238,0.3);
+    animation: bubble-rise linear infinite;
+  }
+
+  /* ケンバーンズ（写真にゆっくりズーム） */
+  @keyframes kenburns {
+    0%   { transform: scale(1)    translate(0, 0); }
+    100% { transform: scale(1.12) translate(-2%, -1%); }
+  }
+
+  /* 写真パネル */
+  .photo-strip {
+    display: flex;
+    gap: 7px;
+    opacity: 0;
+    transform: translateY(14px);
+    flex-shrink: 0;
+  }
+  .slide.active .photo-strip { animation: fadeUp 0.55s ease forwards; }
+
+  .photo-panel {
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  .photo-panel .ph-img {
+    width: 100%; height: 100%;
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    animation: kenburns 18s linear forwards;
+  }
+  .photo-panel .ph-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,30,30,0.75) 0%, rgba(0,0,0,0.05) 55%);
+    display: flex; align-items: flex-end;
+    padding: 7px 9px;
+  }
+  .ph-label {
+    color: rgba(255,255,255,0.93);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.4px;
+    line-height: 1.3;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+
+  /* ツアーハイライトブロック（写真＋バッジ横並び） */
+  .tour-highlight {
+    border-radius: 9px;
+    overflow: hidden;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    border: 1.5px solid rgba(0,68,68,0.18);
+  }
+  .slide.active .tour-highlight { animation: fadeUp 0.5s ease forwards; }
+  .tour-hl-top {
+    height: 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .tour-hl-top .ph-img {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    animation: kenburns 20s linear forwards;
+  }
+  .tour-hl-top .ph-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,68,68,0.65), rgba(0,40,40,0.4));
+    display: flex; align-items: center;
+    padding: 0 14px; gap: 10px;
+  }
+  .tour-hl-title {
+    font-size: 13px; font-weight: 900;
+    color: white;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+  }
+  .tour-hl-body {
+    background: var(--teal-light);
+    padding: 7px 14px;
+    display: flex; align-items: center;
+    gap: 6px; flex-wrap: wrap;
+  }
+  .tour-tag {
+    background: var(--teal-dark);
+    color: white; font-size: 9px; font-weight: 700;
+    padding: 2px 8px; border-radius: 9px;
+    white-space: nowrap;
+  }
+
+  /* バッジパルス */
+  @keyframes badge-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(16,122,53,0.5); }
+    50%       { box-shadow: 0 0 0 5px rgba(16,122,53,0); }
+  }
+  .slide.active .badge-ok { animation: badge-glow 2.2s 1s ease infinite; }
+
+  /* 価格カウントアップ風シマー */
+  @keyframes price-shine {
+    0%   { filter: brightness(1); }
+    50%  { filter: brightness(1.25); }
+    100% { filter: brightness(1); }
+  }
+  .slide.active .stat-num { animation: price-shine 2.5s 0.8s ease; }
+
+  /* タイトルキーワードにfloat */
+  @keyframes float-subtle {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-5px); }
+  }
+  .slide.active .title-keywords { animation: fadeUp 0.6s 0.95s ease forwards, float-subtle 5s 1.6s ease-in-out infinite; }
+
+  /* 魚シルエット（タイトルスライド装飾） */
+  .fish-deco {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.12;
+    z-index: 2;
+  }
+  @keyframes fish-swim {
+    0%   { transform: translateX(0) scaleX(1); }
+    49%  { transform: translateX(40px) scaleX(1); }
+    50%  { transform: translateX(40px) scaleX(-1); }
+    100% { transform: translateX(0) scaleX(-1); }
+  }
+  .fish-deco { animation: fish-swim 8s ease-in-out infinite; }
 </style>
 </head>
 <body>
@@ -688,6 +858,57 @@
         <path d="M0,40 C180,90 360,10 540,60 C720,110 900,20 1080,70 C1260,110 1380,50 1440,40 L1440,120 L0,120 Z"/>
       </svg>
     </div>
+    <!-- 泡デコレーション -->
+    <div class="bubbles">
+      <div class="bbl" style="left:8%;  width:10px;height:10px;--dur:5.2s;--delay:0s"></div>
+      <div class="bbl" style="left:18%; width:7px; height:7px; --dur:4.1s;--delay:1.3s"></div>
+      <div class="bbl" style="left:32%; width:13px;height:13px;--dur:6.5s;--delay:0.6s"></div>
+      <div class="bbl" style="left:52%; width:6px; height:6px; --dur:3.8s;--delay:2.1s"></div>
+      <div class="bbl" style="left:67%; width:11px;height:11px;--dur:5.8s;--delay:0.9s"></div>
+      <div class="bbl" style="left:80%; width:8px; height:8px; --dur:4.7s;--delay:1.8s"></div>
+      <div class="bbl" style="left:91%; width:14px;height:14px;--dur:7.0s;--delay:0.3s"></div>
+    </div>
+
+    <!-- 泳ぐウミガメ -->
+    <svg class="turtle-swim" viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+      <!-- 後ろヒレ -->
+      <ellipse cx="28" cy="27" rx="16" ry="6" fill="#267a5a" transform="rotate(-38 28 27)" opacity="0.9"/>
+      <ellipse cx="28" cy="63" rx="16" ry="6" fill="#267a5a" transform="rotate(38 28 63)" opacity="0.9"/>
+      <!-- 甲羅 -->
+      <ellipse cx="54" cy="45" rx="28" ry="22" fill="#1e6b48"/>
+      <ellipse cx="54" cy="45" rx="21" ry="16" fill="#267a5a" opacity="0.55"/>
+      <polygon points="54,30 65,37 67,49 54,57 41,49 43,37" fill="#155c38" opacity="0.45"/>
+      <!-- 甲羅ライン -->
+      <line x1="54" y1="30" x2="54" y2="57" stroke="#88eeee" stroke-width="0.7" opacity="0.35"/>
+      <line x1="42" y1="37" x2="67" y2="37" stroke="#88eeee" stroke-width="0.7" opacity="0.35"/>
+      <line x1="41" y1="49" x2="67" y2="49" stroke="#88eeee" stroke-width="0.7" opacity="0.35"/>
+      <!-- 前ヒレ -->
+      <ellipse cx="42" cy="22" rx="20" ry="7" fill="#267a5a" transform="rotate(-32 42 22)" opacity="0.9"/>
+      <ellipse cx="42" cy="68" rx="20" ry="7" fill="#267a5a" transform="rotate(32 42 68)" opacity="0.9"/>
+      <!-- 首 -->
+      <ellipse cx="83" cy="44" rx="10" ry="8" fill="#1e6b48"/>
+      <!-- 頭 -->
+      <ellipse cx="97" cy="44" rx="12" ry="10" fill="#1e6b48"/>
+      <!-- 目 -->
+      <circle cx="102" cy="39" r="2.5" fill="#ccf0f0"/>
+      <circle cx="102" cy="39" r="1.2" fill="white"/>
+      <!-- 魚の泡 -->
+      <circle cx="112" cy="38" r="2" fill="none" stroke="#88eeee" stroke-width="0.8" opacity="0.5"/>
+      <circle cx="116" cy="34" r="1.2" fill="none" stroke="#88eeee" stroke-width="0.7" opacity="0.35"/>
+    </svg>
+
+    <!-- 魚シルエット装飾 -->
+    <svg class="fish-deco" style="top:35%;right:12%;width:50px" viewBox="0 0 50 28" xmlns="http://www.w3.org/2000/svg">
+      <path d="M38,14 Q50,6 50,14 Q50,22 38,14" fill="#ccf0f0"/>
+      <ellipse cx="22" cy="14" rx="20" ry="10" fill="#ccf0f0"/>
+      <circle cx="34" cy="11" r="2" fill="#004444"/>
+    </svg>
+    <svg class="fish-deco" style="top:60%;left:15%;width:36px;animation-delay:-3s" viewBox="0 0 50 28" xmlns="http://www.w3.org/2000/svg">
+      <path d="M38,14 Q50,6 50,14 Q50,22 38,14" fill="#ccf0f0"/>
+      <ellipse cx="22" cy="14" rx="20" ry="10" fill="#ccf0f0"/>
+      <circle cx="34" cy="11" r="2" fill="#004444"/>
+    </svg>
+
     <div class="left-bar"></div>
     <div class="title-content">
       <div class="title-eyebrow">KUBO FAMILY TRIP 2026</div>
@@ -767,7 +988,7 @@
         <div class="cost-item"><span class="cost-item-name">🚗 トヨタレンタカー（3日）</span><span class="cost-item-price">¥31,977</span></div>
         <div class="cost-item"><span class="cost-item-name">🐢 ウミガメシュノーケリング</span><span class="cost-item-price">¥22,000</span></div>
         <div class="cost-item"><span class="cost-item-name">🛶 ピナイサーラカヌーツアー</span><span class="cost-item-price">¥40,000</span></div>
-        <div class="cost-item"><span class="cost-item-name">⛴ フェリー往復（目安）</span><span class="cost-item-price">≈¥8,000</span></div>
+        <div class="cost-item"><span class="cost-item-name">⛴ フェリー往復（目安）</span><span class="cost-item-price">≈¥19,760</span></div>
       </div>
     </div>
   </div>
@@ -808,13 +1029,53 @@
           <div class="tl-detail">石垣島の郷土そばを堪能（来夏世・明石食堂など）</div>
         </div>
       </div>
-      <div class="tl-row">
-        <div class="tl-time" style="background:var(--teal-mid)">13:00</div>
-        <div class="tl-body" style="background:#eaf8f8">
-          <div class="tl-top"><span class="tl-title">🐢 ウミガメシュノーケリング</span><span class="badge-req">要予約</span></div>
-          <div class="tl-detail">川平湾エリア　¥22,000（4名）</div>
+      <!-- ウミガメツアーハイライト -->
+      <div class="tour-highlight">
+        <div class="tour-hl-top">
+          <div class="ph-img" style="background:linear-gradient(135deg,#003d3d 0%,#006b6b 50%,#0a9988 100%)">
+            <svg style="position:absolute;right:16px;top:50%;transform:translateY(-50%);width:64px;opacity:0.55" viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="28" cy="27" rx="16" ry="6" fill="#ccf0f0" transform="rotate(-38 28 27)"/>
+              <ellipse cx="28" cy="63" rx="16" ry="6" fill="#ccf0f0" transform="rotate(38 28 63)"/>
+              <ellipse cx="54" cy="45" rx="28" ry="22" fill="#88eeee"/>
+              <ellipse cx="54" cy="45" rx="21" ry="16" fill="#ccf0f0" opacity="0.5"/>
+              <ellipse cx="42" cy="22" rx="20" ry="7" fill="#ccf0f0" transform="rotate(-32 42 22)"/>
+              <ellipse cx="42" cy="68" rx="20" ry="7" fill="#ccf0f0" transform="rotate(32 42 68)"/>
+              <ellipse cx="97" cy="44" rx="12" ry="10" fill="#88eeee"/>
+              <circle cx="102" cy="39" r="2" fill="white"/>
+            </svg>
+          </div>
+          <div class="ph-overlay">
+            <div>
+              <div class="tour-hl-title">🐢 少人数制ウミガメシュノーケリング</div>
+              <div style="font-size:10px;color:rgba(200,255,255,0.85);margin-top:2px">Tomori Ishigaki　13:00〜　1〜2時間</div>
+            </div>
+            <span class="badge-ok" style="margin-left:auto;flex-shrink:0">✅ 予約済み</span>
+          </div>
+        </div>
+        <div class="tour-hl-body">
+          <span class="tour-tag">遭遇率99%</span>
+          <span class="tour-tag">全額返金保証</span>
+          <span class="tour-tag">写真データ無料</span>
+          <span class="tour-tag">機材・送迎無料</span>
+          <span style="margin-left:auto;font-size:12px;font-weight:900;color:var(--teal-dark)">¥5,500×4名 = ¥22,000</span>
         </div>
       </div>
+      <!-- 写真ストリップ -->
+      <div class="photo-strip" style="height:78px">
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#0077b6,#00b4d8,#48cae4)"></div>
+          <div class="ph-overlay"><span class="ph-label">🌊 石垣の海</span></div>
+        </div>
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#006b6b,#0a9988,#88eeee)"></div>
+          <div class="ph-overlay"><span class="ph-label">🐢 ウミガメと泳ぐ</span></div>
+        </div>
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#f77f00,#d62828,#fcbf49)"></div>
+          <div class="ph-overlay"><span class="ph-label">🌅 石垣の夕焼け</span></div>
+        </div>
+      </div>
+
       <div class="tl-row">
         <div class="tl-time" style="background:var(--teal-mid)">15:30</div>
         <div class="tl-body" style="background:#eaf8f8">
@@ -858,7 +1119,7 @@
         <div class="tl-time" style="background:var(--purple-dark)">07:30</div>
         <div class="tl-body" style="background:var(--purple-light)">
           <div class="tl-top"><span class="tl-title">⛴ 石垣港 出発 → 上原港 08:45着</span></div>
-          <div class="tl-detail">安栄観光フェリー　大人 ¥2,690 / 子ども ¥1,350</div>
+          <div class="tl-detail">安栄観光フェリー　大人 ¥3,290 / 子ども ¥1,650（片道）</div>
         </div>
       </div>
 
@@ -872,6 +1133,22 @@
             <div style="font-size:14px;font-weight:900;color:var(--purple-dark);margin-top:6px">¥10,000 × 4名 = ¥40,000</div>
           </div>
           <span class="badge-req" style="font-size:11px;padding:4px 10px;margin-top:2px">要予約</span>
+        </div>
+      </div>
+
+      <!-- 写真ストリップ（カヌー・滝） -->
+      <div class="photo-strip" style="height:76px">
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#1b4332,#2d6a4f,#52b788)"></div>
+          <div class="ph-overlay"><span class="ph-label">🌿 西表のジャングル</span></div>
+        </div>
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#023e8a,#0077b6,#48cae4)"></div>
+          <div class="ph-overlay"><span class="ph-label">🛶 カヌー＆滝</span></div>
+        </div>
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#7b2d8b,#9d4edd,#c77dff)"></div>
+          <div class="ph-overlay"><span class="ph-label">🐃 水牛車で由布島</span></div>
         </div>
       </div>
 
@@ -1001,6 +1278,18 @@
             <div class="plan-title" style="color:var(--orange)">⚠ 上原航路 欠航の場合</div>
             <div class="plan-detail">バスで大原港へ → 大原港 11:30発 → 12:40着</div>
           </div>
+        </div>
+      </div>
+
+      <!-- 写真ストリップ（DAY3） -->
+      <div class="photo-strip" style="height:72px">
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#b5451b,#e76f51,#f4a261)"></div>
+          <div class="ph-overlay"><span class="ph-label">⛴ 西表→石垣フェリー</span></div>
+        </div>
+        <div class="photo-panel">
+          <div class="ph-img" style="background:linear-gradient(160deg,#0077b6,#90e0ef,#caf0f8)"></div>
+          <div class="ph-overlay"><span class="ph-label">🏨 ANAインターコンチネンタル</span></div>
         </div>
       </div>
 
@@ -1149,8 +1438,8 @@
       <div class="summary-card" style="animation-delay:0.66s">
         <div class="summary-accent" style="background:var(--gray)"></div>
         <div class="summary-body">
-          <div class="summary-name">⛴ フェリー往復（目安）</div>
-          <div class="summary-price" style="color:#444">≈¥8,000</div>
+          <div class="summary-name">⛴ フェリー往復（大人×2＋子×2）</div>
+          <div class="summary-price" style="color:#444">≈¥19,760</div>
         </div>
       </div>
     </div>
